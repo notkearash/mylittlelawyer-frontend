@@ -1,11 +1,16 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Libre_Baskerville, IBM_Plex_Sans, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const fontHeader = Libre_Baskerville({
+  variable: "--font-header",
   subsets: ["latin"],
 });
+
+const fontMain = IBM_Plex_Sans({
+  variable: "--font-main",
+  subsets: ["latin"],
+})
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -25,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${fontHeader.variable} ${fontMain.variable} ${geistMono.variable} antialiased`}
       >
         {children}
       </body>
