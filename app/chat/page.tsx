@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { ProtectedRoute } from "@/components/protected-route";
+import { useAuth } from "@/contexts/auth-context";
 
 function getGreeting() {
   const hour = new Date().getHours();
@@ -13,10 +15,14 @@ function getGreeting() {
 
 export default function ChatPage() {
   const router = useRouter();
+  const { user, logout } = useAuth();
   const [message, setMessage] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
+  const displayName = user?.email?.split("@")[0] || "there";
+
   return (
+    <ProtectedRoute>
     <div className="h-svh bg-background flex overflow-hidden">
       {sidebarOpen && (
         <aside className="w-16 max-w-16 h-full shrink-0 border-r border-border/30 flex flex-col items-center py-4 gap-2 overflow-hidden">
@@ -95,9 +101,13 @@ export default function ChatPage() {
           </Button>
 
           <div className="mt-auto">
-            <div className="w-8 h-8 rounded-full bg-secondary/30 flex items-center justify-center text-sm font-medium text-foreground/70">
-              K
-            </div>
+            <button
+              onClick={logout}
+              className="w-8 h-8 rounded-full bg-secondary/30 flex items-center justify-center text-sm font-medium text-foreground/70 hover:bg-secondary/50 transition-colors"
+              title="Sign out"
+            >
+              {displayName.charAt(0).toUpperCase()}
+            </button>
           </div>
         </aside>
       )}
@@ -126,7 +136,7 @@ export default function ChatPage() {
 
         <div className="w-full max-w-2xl flex flex-col items-center">
           <h1 className="font-header text-4xl md:text-5xl text-foreground mb-10 text-center">
-            {getGreeting()}, Kia
+            {getGreeting()}, {displayName}
           </h1>
 
           <div className="w-full">
@@ -170,5 +180,6 @@ export default function ChatPage() {
         </div>
       </main>
     </div>
+    </ProtectedRoute>
   );
 }
